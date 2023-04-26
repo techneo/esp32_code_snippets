@@ -19,7 +19,7 @@
 int scanTime = 5; //In seconds
 BLEScan *pBLEScan;
 uint16_t thex;
-uint8_t temp;
+float temp;
 
 class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
 {
@@ -47,8 +47,12 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
               //Serial.printf("0x%X ", cServiceData[i]);
             }
             thex = cServiceData[22] | (cServiceData[21] << 8);
-            temp = (uint8_t) - 45 + (( thex * 175) / 0xFFFF);
-            Serial.printf("Temperature= %d\n", temp);
+            temp =  - 45.0 + (( thex * 175.0) / 65535.0);
+            Serial.printf("Temperature= %2.2f .C \n", temp);
+
+            thex = cServiceData[23] | (cServiceData[24] << 8);
+            temp = ( thex * 100.0) / 65535.0;
+            Serial.printf("Humidity= %2.2f %%  \n", temp);
           }
         }
       }
